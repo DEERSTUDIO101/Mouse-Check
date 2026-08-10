@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "OpenMouse Diagnostics",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "identifier": "com.openmouse.diagnostics",
   "build": {
     "frontendDist": "../src"
@@ -35,15 +35,18 @@
     ],
     "publisher": "OpenMouse",
     "copyright": "© 2025 OpenMouse",
-    "nsis": {
-      "installMode": "both"
-    },
+    "windows": {
+      "nsis": {
+        "installMode": "both"
+      }
+    }
+  },
+  "plugins": {
     "updater": {
-      "active": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEFFRTIzMzFFRjFGNkJDNwpSV1RIYXgvdk1TUHVDcW1UL3VtdFBoWVdib3UxOC9oVit1emFRN2RCajE0elpkUkl1d1dydDZpRAo=",
       "endpoints": [
         "https://github.com/DEERSTUDIO101/Mouse-Check/releases/latest/download/latest.json"
       ],
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEFFRTIzMzFFRjFGNkJDNwpSV1RIYXgvdk1TUHVDcW1UL3VtdFBoWVdib3UxOC9oVit1emFRN2RCajE0elpkUkl1d1dydDZpRAo=",
       "windows": {
         "installMode": "passive"
       }
