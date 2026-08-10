@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "OpenMouse Diagnostics",
+  "version": "0.1.0",
+  "identifier": "com.openmouse.diagnostics",
+  "build": {
+    "frontendDist": "../src"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "title": "OpenMouse Diagnostics",
+        "width": 740,
+        "height": 700,
+        "minWidth": 480,
+        "minHeight": 400,
+        "resizable": true,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "publisher": "OpenMouse",
+    "copyright": "© 2025 OpenMouse",
+    "updater": {
+      "active": true,
+      "endpoints": [
+        "https://github.com/DEERSTUDIO101/Mouse-Check/releases/latest/download/latest.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEFFRTIzMzFFRjFGNkJDNwpSV1RIYXgvdk1TUHVDcW1UL3VtdFBoWVdib3UxOC9oVit1emFRN2RCajE0elpkUkl1d1dydDZpRAo=",
+      "windows": {
+        "installMode": "passive"
+      }
+    }
+  }
+}
