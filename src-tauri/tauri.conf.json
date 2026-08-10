@@ -35,6 +35,9 @@
     ],
     "publisher": "OpenMouse",
     "copyright": "© 2025 OpenMouse",
+    "nsis": {
+      "installMode": "both"
+    },
     "updater": {
       "active": true,
       "endpoints": [
