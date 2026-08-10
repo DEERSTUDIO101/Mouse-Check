@@ -291,9 +291,16 @@ fn run_generic_scan(api: &HidApi, pid: u16, vid: u16) -> Result<DeviceReport, St
             }
             Some(dev) => {
                 if is_vendor { has_accessible_vendor = true; }
-                // Try a short feature-report probe (report 0x00)
-                let mut buf = vec![0u8; 65];
-                let has_fr = dev.get_feature_report(&mut buf).is_ok();
+                // Endgame Gear (0x3367): firmware has no safety guards — a raw
+                // feature-report probe triggered a bootloader reset on the OP1 8K.
+                // Skip probing and report accessible-only for affected vendors.
+                const SKIP_PROBE_VIDS: &[u16] = &[0x3367];
+                let has_fr = if SKIP_PROBE_VIDS.contains(&vid) {
+                    false
+                } else {
+                    let mut buf = vec![0u8; 65];
+                    dev.get_feature_report(&mut buf).is_ok()
+                };
                 IfaceAccessResult { accessible: true, has_feature_report: has_fr, error: None }
             }
         };
