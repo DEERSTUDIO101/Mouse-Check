@@ -327,10 +327,83 @@ async function installUpdate() {
   }
 }
 
+const WEBHOOK_KEY = 'om-discord-webhook';
+
+function loadWebhookUrl() {
+  const saved = localStorage.getItem(WEBHOOK_KEY) ?? '';
+  const input = document.getElementById('webhook-url');
+  if (input) input.value = saved;
+}
+
+document.getElementById('webhook-url')?.addEventListener('change', (e) => {
+  localStorage.setItem(WEBHOOK_KEY, e.target.value.trim());
+});
+
+async function sendToDiscord() {
+  const urlInput = document.getElementById('webhook-url');
+  const url = urlInput?.value.trim();
+  const statusEl = document.getElementById('send-status');
+  const btn = document.getElementById('send-btn');
+
+  if (!url) {
+    statusEl.className = 'send-status err';
+    statusEl.textContent = 'Paste a Discord Webhook URL first.';
+    return;
+  }
+  if (!url.startsWith('https://discord.com/api/webhooks/') && !url.startsWith('https://discordapp.com/api/webhooks/')) {
+    statusEl.className = 'send-status err';
+    statusEl.textContent = 'That doesn\'t look like a Discord webhook URL.';
+    return;
+  }
+
+  localStorage.setItem(WEBHOOK_KEY, url);
+
+  const text = document.getElementById('copy-text').value;
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  statusEl.className = 'send-status';
+  statusEl.textContent = '';
+
+  try {
+    // Wrap in code block; Discord cap is 2000 chars
+    const wrapped = '```\n' + text + '\n```';
+    const content = wrapped.length <= 2000 ? wrapped : text.slice(0, 1990) + '\n…';
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: 'OpenMouse Diagnostics', content }),
+    });
+
+    if (res.ok || res.status === 204) {
+      btn.textContent = '✓ Sent!';
+      btn.classList.add('ok');
+      statusEl.className = 'send-status ok';
+      statusEl.textContent = 'Report sent to Discord.';
+    } else {
+      const body = await res.text().catch(() => '');
+      throw new Error(`HTTP ${res.status}${body ? ': ' + body.slice(0, 120) : ''}`);
+    }
+  } catch (e) {
+    btn.textContent = 'Failed';
+    btn.classList.add('err');
+    statusEl.className = 'send-status err';
+    statusEl.textContent = String(e);
+  } finally {
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = 'Send to Discord';
+      btn.classList.remove('ok', 'err');
+    }, 3000);
+  }
+}
+
 window.scan = scan;
 window.runTest = runTest;
 window.copyReport = copyReport;
+window.sendToDiscord = sendToDiscord;
 window.installUpdate = installUpdate;
 
 scan();
 checkForUpdate();
+loadWebhookUrl();

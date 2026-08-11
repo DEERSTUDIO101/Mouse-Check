@@ -252,6 +252,36 @@
     .copy-btn:hover { filter: brightness(1.1); }
     .copy-btn.copied { background: linear-gradient(135deg, var(--success-border), #48a870); }
 
+    /* ─── Webhook Row ─── */
+    .webhook-row {
+      display: flex; gap: 6px; padding: 10px 14px;
+      border-top: 1px solid var(--border); background: var(--surface-2);
+    }
+    .webhook-input {
+      flex: 1; background: var(--surface); border: 1px solid var(--border-2);
+      border-radius: var(--radius-sm); padding: 7px 10px;
+      font-family: var(--font-mono); font-size: 11px; color: var(--text);
+      outline: none; transition: border-color 0.15s;
+    }
+    .webhook-input:focus { border-color: var(--accent); }
+    .webhook-input::placeholder { color: var(--text-muted); }
+    .send-btn {
+      white-space: nowrap; background: #5865F2; border: none; color: #fff;
+      border-radius: var(--radius-sm); padding: 7px 14px;
+      font-size: 12px; font-weight: 700; font-family: var(--font-ui);
+      cursor: pointer; transition: filter 0.15s, opacity 0.15s;
+    }
+    .send-btn:hover:not(:disabled) { filter: brightness(1.12); }
+    .send-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .send-btn.ok  { background: linear-gradient(135deg, var(--success-border), #48a870); }
+    .send-btn.err { background: linear-gradient(135deg, var(--fail-border), #c04040); }
+    .send-status {
+      padding: 6px 14px 10px; font-size: 11.5px; font-family: var(--font-ui);
+      display: none;
+    }
+    .send-status.ok  { display: block; color: var(--success-text); }
+    .send-status.err { display: block; color: var(--fail-text); }
+
     /* ─── Update Banner ─── */
     .update-banner {
       display: none; align-items: center; gap: 10px;
@@ -342,9 +372,14 @@
   <div id="copy-section" class="copy-section">
     <div class="copy-header">
       <span class="copy-title">Discord Report</span>
-      <span class="copy-hint">Copy &amp; paste directly into Discord</span>
+      <span class="copy-hint">Send directly or copy to clipboard</span>
     </div>
     <textarea id="copy-text" class="copy-text" readonly></textarea>
+    <div class="webhook-row">
+      <input id="webhook-url" class="webhook-input" type="text" placeholder="Discord Webhook URL (saved locally)" spellcheck="false" />
+      <button id="send-btn" class="send-btn" onclick="sendToDiscord()">Send to Discord</button>
+    </div>
+    <div id="send-status" class="send-status"></div>
     <button id="copy-btn" class="copy-btn" onclick="copyReport()">Copy to Clipboard</button>
   </div>
 
